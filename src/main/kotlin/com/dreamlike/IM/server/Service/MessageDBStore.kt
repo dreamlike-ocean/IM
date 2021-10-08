@@ -17,7 +17,7 @@ class MessageDBStore(private val pool: Pool) {
   suspend fun insertMessageRecord(messageRecord: MessageRecord):Int{
     //language=sql
     val res= pool.connection.await().use {
-      SqlTemplate.forUpdate(it, "INSERT INTO message_record (sender, receiver, type, content, timestamp) VALUE (#{sender},#{receiver},#{type},#{content},#{timestamp})")
+      SqlTemplate.forUpdate(it, "INSERT INTO message_record (sender, receiver, type, content, timestamp,has_read) VALUE (#{sender},#{receiver},#{type},#{content},#{timestamp},#{hasRead})")
         .mapFrom(MessageRecord.tupleMapper)
         .execute(messageRecord).await()
     }
@@ -54,6 +54,25 @@ class MessageDBStore(private val pool: Pool) {
     return res.value()
   }
 
+  suspend fun selectUnreadMessage(receiver:Int):List<MessageRecord>{
+    val res = pool.connection.await().use {
+      SqlTemplate.forQuery(it,"SELECT * FROM message_record WHERE receiver = #{receiver} AND has_read = 0")
+        .collecting(MessageRecord.collector)
+        .execute(mapOf("receiver" to receiver))
+        .await()
+    }
+    return res.value();
+  }
+
+  suspend fun selectMessage(receiver:Int,sender:Int):List<MessageRecord>{
+    val res = pool.connection.await().use {
+      SqlTemplate.forQuery(it,"SELECT * FROM message_record WHERE receiver = #{receiver} AND sender =  #{sender}")
+        .collecting(MessageRecord.collector)
+        .execute(mapOf("receiver" to receiver,"sender" to sender))
+        .await()
+    }
+    return res.value();
+  }
 
 
 

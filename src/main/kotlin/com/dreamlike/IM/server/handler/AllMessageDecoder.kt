@@ -113,7 +113,7 @@ class AllMessageDecoder:ChannelInboundHandlerAdapter(){
    */
   private fun switchToParseBody(msg: ByteBuf,ctx: ChannelHandlerContext){
     nowState = ParseState.BODY
-    val sender= getUserIdFromChannel(ctx.channel()) ?: -1
+    val sender= getUserIdFromChannel(ctx.channel())
     val messageHeader = MessageHeader(type = msg.readInt(), sequenceId = msg.readInt(),payloadLength = msg.readInt(), senderId = sender)
     targetLength = messageHeader.payloadLength
     //期望设置bodyHandler

@@ -1,11 +1,17 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
+
 public class Test {
   private static final Object lock = new Object();
   private static volatile int  now = 1;
   @org.junit.jupiter.api.Test
-  public void test() throws InterruptedException {
-    new Thread1(14).start();
-    new Thread2(14).start();
-    Thread.sleep(41000);
+  public void test() throws InterruptedException, IOException {
+
   }
   static class Thread1 extends Thread{
     private int max;

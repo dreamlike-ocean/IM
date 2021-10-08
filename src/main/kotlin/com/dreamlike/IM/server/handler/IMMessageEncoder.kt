@@ -21,7 +21,7 @@ class IMMessageEncoder(private val isSsl:Boolean = false):ChannelOutboundHandler
     val type = msg.type
     when{
       isFile(type) -> writeAndFlushFile(ctx,msg)
-      isText(type) -> writeAndFlushFile(ctx,msg)
+      isText(type) -> writeAndFlushText(ctx,msg)
     }
   }
   private fun writeAndFlushFile(ctx: ChannelHandlerContext,msg: MessageRecord){

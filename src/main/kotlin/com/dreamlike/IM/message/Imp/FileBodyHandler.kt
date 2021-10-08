@@ -43,6 +43,7 @@ class FileBodyHandler(val messageHeader: MessageHeader):BodyHandler {
       MessageService.sentMessageRecord(MessageRecord(messageHeader.senderId,receiverId,messageHeader.type,filePath,messageHeader.timestamp))
     }
   }
+
   private fun parseFilename(msg:ByteBuf){
     val index = msg.indexOf(msg.readerIndex(),msg.readerIndex()+msg.readableBytes(), FileDelimited)
     if (index == -1){

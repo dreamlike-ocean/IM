@@ -26,3 +26,15 @@ AuthenticateHandler和其余Request
 后四位（int）payLoadLength
 
 最后为（int）senderId
+
+#### request的body格式
+json结构必须存在requestType用于指示当前请求的目的
+
+pullUnread -> 拉取未读信息，响应中json的message为此次结果
+
+pullRecord -> 拉取与某人所有的记录 必须包括number类型的receiver字段响应中，json的message为此次结果
+
+#### 其余的body格式
+[id1,id2,id3,id4 {text}] 文本
+
+[id1,id2,id3&filename fileBuffer] 文件

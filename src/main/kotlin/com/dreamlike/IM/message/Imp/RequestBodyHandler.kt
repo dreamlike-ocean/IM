@@ -5,11 +5,12 @@ import com.dreamlike.IM.server.Service.MessageService
 import com.dreamlike.IM.server.Service.data.MessageRequest
 import io.netty.buffer.ByteBuf
 import io.vertx.core.json.JsonObject
-
+import io.vertx.kotlin.core.json.get
+//body必须包括requestType
 class RequestBodyHandler(val messageHeader: MessageHeader):AbstractFullBodyHandler() {
 
   override fun work(fullBody: ByteBuf) {
     val json = JsonObject(fullBody.readCharSequence(fullBody.readableBytes(), Charsets.UTF_8).toString())
-    MessageService.processRequest(MessageRequest(header = messageHeader,json))
+    MessageService.processRequest(MessageRequest(header = messageHeader,json,json["requestType"]))
   }
 }

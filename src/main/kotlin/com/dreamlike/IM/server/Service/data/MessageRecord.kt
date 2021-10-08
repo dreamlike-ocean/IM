@@ -5,7 +5,7 @@ import io.vertx.sqlclient.templates.TupleMapper
 import java.util.Map
 import java.util.stream.Collectors
 
-class MessageRecord(val sender: Int,val receiver: Int,val type: Int,val content: String,val timestamp: Long,val hasRead:Boolean = false) :FieldTransform{
+class MessageRecord(val sender: Int,val receiver: Int,val type: Int,val content: String,val timestamp: Long,var hasRead:Boolean = false) :FieldTransform{
   public var recordId:Int? = null
 
   constructor(sender: Int,receiver: Int,type: Int,content: String,timestamp: Long,hasRead:Boolean = false,recordId:Int):this(sender, receiver, type, content, timestamp,hasRead){
@@ -24,13 +24,17 @@ class MessageRecord(val sender: Int,val receiver: Int,val type: Int,val content:
         "content",
         messageRecord.content,
         "timestamp",
-        messageRecord.timestamp
+        messageRecord.timestamp,
+        "hasRead",
+        messageRecord.hasRead
       )
     }
       val rowMapper = RowMapper { row ->
         MessageRecord(sender = row.getInteger("sender"),receiver = row.getInteger("receiver"),recordId = row.getInteger("record_id"),type = row.getInteger("type")
           ,content = row.getString("content")
-          ,timestamp = row.getLong("timestamp"))
+          ,timestamp = row.getLong("timestamp")
+          ,hasRead = row.getBoolean("has_read")
+        )
       }
       val collector = Collectors.mapping(rowMapper::map,Collectors.toList())
     }

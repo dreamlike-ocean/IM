@@ -2,6 +2,7 @@ package com.dreamlike.IM.Util
 
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.ByteBuf
+import io.netty.util.concurrent.Future
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.MessageCodec
@@ -11,20 +12,21 @@ import io.vertx.kotlin.coroutines.dispatcher
 import io.vertx.sqlclient.SqlConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-suspend inline fun ServerBootstrap.bindAwait(port: Int)= suspendCoroutine<Unit?> { c ->
-  this.bind(port)
-    .addListener {
-      if (it.isSuccess) {
-        c.resume(null)
-      }else{
-        c.resumeWithException(it.cause())
-      }
+
+suspend fun <T> Future<T>.awaitGet() = suspendCoroutine<T> { c ->
+  this.addListener {
+    if (it.isSuccess) {
+      c.resume(it.now as T)
+    }else{
+      c.resumeWithException(it.cause())
     }
+  }
 }
 
 fun Route.suspendHandler(handler:suspend (RoutingContext) -> Unit){
@@ -69,18 +71,5 @@ inline fun ByteBuf.use(fn:()->Unit){
     fn()
   } finally {
     this.release()
-  }
-}
-
-class Builder<T>(construct:()->T){
-  private val target:T = construct()
-
-  fun<P> set(setter:(T,P)->Unit,param:P):Builder<T>{
-    setter(target,param)
-    return this
-  }
-
-  fun build():T{
-    return target
   }
 }
