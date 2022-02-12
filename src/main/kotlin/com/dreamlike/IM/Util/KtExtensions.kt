@@ -1,6 +1,5 @@
 package com.dreamlike.IM.Util
 
-import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.ByteBuf
 import io.netty.util.concurrent.Future
 import io.vertx.core.buffer.Buffer
@@ -12,7 +11,6 @@ import io.vertx.kotlin.coroutines.dispatcher
 import io.vertx.sqlclient.SqlConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

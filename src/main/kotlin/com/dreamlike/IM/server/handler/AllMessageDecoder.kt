@@ -59,6 +59,7 @@ class AllMessageDecoder:ChannelInboundHandlerAdapter(){
 
   private fun headerStageHandler(ctx: ChannelHandlerContext, msg: ByteBuf){
     if (msg.readableBytes()+headerBuffer.readableBytes() >= 12){
+
       val headerAndBodyPart = ctx.alloc().compositeBuffer().addComponent(true,headerBuffer).addComponent(true,msg)
       headerBuffer = emptyByteBuf
       switchToParseBody(headerAndBodyPart,ctx)

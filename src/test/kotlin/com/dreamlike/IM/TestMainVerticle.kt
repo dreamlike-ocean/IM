@@ -2,6 +2,7 @@ package com.dreamlike.IM
 
 
 import com.dreamlike.IM.server.Service.data.User
+import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.netty.buffer.Unpooled
 import io.vertx.core.AbstractVerticle
@@ -28,6 +29,8 @@ class TestMainVerticle {
 
   @Test
   fun verticle_deployed() {
+
+
 
   }
 
